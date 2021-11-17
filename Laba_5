@@ -1,0 +1,39 @@
+create database rybkin_leha;
+
+create table Tovari_rybkin(id_tovara int not null auto_increment, name_tovara varchar(50) character set 'utf8',price float, primary key(id_tovara))
+create table TTN_rybkin(N_Nakladnoy int,DataP date,Postavschik varchar(50) character set 'utf8',id_tovara int not null,kolvo int,FOREIGN KEY (id_tovara) REFERENCES Tovari_efimenko(id_tovara))
+
+create user rybka_user1;
+create user rybka_user2;
+
+
+set password for rybka_user1 = "1234";
+set password for rybka_user2 = "1234";
+
+
+grant select on rybkin_leha.* to rybka_user1  with grant option;
+grant update on rybkin_leha.* to rybka_user2  with grant option;
+
+ЗАЙТИ ПОД rybka_user1
+
+set password=15413478;
+
+select * from TTN_rybkin;
+
+ЗАЙТИ ПОД rybka_user2
+
+update Tovari_rybkin
+set price = 2000
+where  id_tovara = (select Max(id_tovara) from TTN_rybkin);
+
+update TTN_rybkin
+set DataP = 12.03.2020
+where  N_Nakladnoy = (select Max(N_Nakladnoi) from TTN_rybkin);
+
+ЗАЙТИ ПОД root
+
+grant update on TTN_rybkin.* and Tovari_rybkin.* to rybka_user1;
+grant insert on TTN_rybkin.* and Tovari_rybkin.* to rybka_user1;
+grant select on Tovari_rybkin.* to rybka_user1;
+revoke update on Tovari_rybkin.* from rybka_user2;
+grant delete on TTN_rybkin.* to rybka_user2;
